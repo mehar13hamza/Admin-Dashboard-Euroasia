@@ -1,0 +1,285 @@
+{% include './includes/sidebar.html' %}
+
+{% load static %}
+<style>
+
+    label span{
+
+        color:red;
+
+    }
+
+
+
+
+</style>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Add Expense </h1>
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <!-- Circle Buttons -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Expense Details</h6>
+                </div>
+                <div class="card-body">
+                    <form class="form" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table" border="0">
+                                    <tbody>
+
+
+                                    <tr>
+
+                                        <td><label>Expense Id<span>*</span></label></td>
+
+                                        <td><input type="text" id="expense_id" name="expense_id" class="form-control" required readonly>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Expense Type<span>*</span></label></td>
+                                        <td>
+                                            <select type="text" name="expense_type" class="form-control" required>
+
+                                                <option value="Bill">Bill</option>
+                                                <option value="Rent">Rent</option>
+                                                <option value="Admin">Admin</option>
+                                                <option value="Employee Salary">Employee Salary</option>
+                                                <option value="Food Expenses">Food Expenses</option>
+                                                <option value="Others">Others</option>
+
+                                            </select>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td><label>Expense Date<span>*</span></label></td>
+                                        <td><input name="expense_date" type="date" class="form-control" required>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Material</label></td>
+                                        <td><input type="text" name="material"  class="form-control">
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td><label>Currency<span>*</span></label></td>
+                                        <td>
+
+                                            <select name="currency" class="form-control" required>
+
+                                                {% for currency in currencies %}
+
+                                                <option value="{{currency.id}}">{{currency.currency_name}} ({{currency.currency_symbol}})</option>
+
+                                                {% endfor %}
+
+                                            </select>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td><label>Bank Account For Payment<span>*</span></label></td>
+                                        <td>
+                                            <select name="bankaccount" class="form-control" required>
+
+                                                {% for bankaccount in bankaccounts %}
+
+                                                <option value="{{bankaccount.id}}">({{bankaccount.currency.abbreviation}}) {{bankaccount.bank_account_id}}</option>
+
+                                                {% endfor %}
+
+                                            </select>
+                                        </td>
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table" border="0">
+                                    <tbody>
+
+
+
+                                    <tr>
+
+                                        <td><label>Expense Quantity<span>*</span></label></td>
+                                        <td><input type="number" id="expense_quantity" name="expense_quantity" min="1" class="form-control" required>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td><label>Expense Cost<span>*</span></label></td>
+                                        <td><input type="number" id="expense_cost" name="expense_cost" min="1" step="0.01" class="form-control" required>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td><label>Amount Paid<span>*</span></label></td>
+                                        <td><input type="number" id="amount" name="amount" min="1" step="0.01" class="form-control" required>
+                                        </td>
+                                    </tr>
+
+
+
+                                    <tr>
+
+                                        <td><label>Pdf Attachment</label></td>
+                                        <td><input type="file" name="pdf_attachment_box" class="form-control">
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td><label>Notes</label></td>
+                                        <td>
+                                            <textarea name="notes" class="form-control" rows="2">
+                                            </textarea>
+                                        </td>
+                                    </tr>
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-md-12 form-group">
+                                <button type="submit" class="btn btn-primary form-control">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Brand Buttons -->
+
+        </div>
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; EuroAsia Dashboard 2020</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+<div class="modal fade" id="errors" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Request Unsuccessful!!</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">{{errors}}</div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Go back</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Request Successful</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Your response has been recorded sucessfully</div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" data-dismiss="modal">Go back</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Logout Modal-->
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+{% if message %}
+<script>
+
+    $("#message").modal('show');
+  </script>
+{% endif %}
+
+{% if errors %}
+<script>
+
+    $("#errors").modal('show');
+  </script>
+{% endif %}
+
+
+
+<script>
+
+var num = Date.now();
+var id = (num.toString()).replace(/^.{6}/,'EXP')
+$("#expense_id").val(id)
+
+</script>
+
+</body>
+
+</html>

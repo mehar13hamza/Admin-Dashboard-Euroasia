@@ -1,0 +1,255 @@
+{% include './includes/sidebar.html' %}
+{% load static %}
+{% load mathfilters %}
+<style>
+    table td{
+        /* text-align: center; */
+        color: black;
+    }
+    .table {
+        border-top: none;
+    }
+    .container{
+        margin-bottom: 30px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-xs-12">
+            <h2 class="text-dark">
+                Sale Order {{sale_order.display_name}}
+            </h2>
+        </div>
+        <div class="col-md-2 col-xs-12">
+            <a href="{% url 'print_sale_order' id=sale_order.id %}" class="btn btn-danger form-control" target="_blank">Print</a>
+        </div>
+    </div>
+</div>
+
+<div class="container table-responsive-sm">
+    <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;">Order Invoice No</td>
+            <td class="table-primary">{{sale_order.order_invoice_no}}</td>
+          </tr>      
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Customer Name</td>
+            <td class="table-danger">{{sale_order.customer.customer_name}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Date of Sale</td>
+            <td class="table-success">{{sale_order.order_date}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">ETA</td>
+            <td class="table-info">{{sale_order.date_of_arrival}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Sale Amount</td>
+            <td class="table-warning"><span class="currency">{{sale_order.total}}</span> {{sale_order.bank_account_payment.currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Sale Currency</td>
+            <td class="table-active">{{sale_order.currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Advance</td>
+            <td class="table-secondary"><span class="currency">{{sale_order.advance}}</span> {{sale_order.customer_account_currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Advance Currency</td>
+            <td class="table-light"><span class="currency">{{sale_order.purchase_order.order_receipt_no}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Purchase Order Reference</td>
+            <td class="table-warning">{{sale_order.purchase_order.order_receipt_no}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Purchase Amount</td>
+            <td class="table-primary">{{final.purchase_order_total}}</span> {{sale_order.purchase_order.seller_currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Purchase Currency</td>
+            <td class="table-danger">{{sale_order.purchase_order.seller_currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Admin Cost</td>
+            <td class="table-success"><span class="currency">{{sale_order.admin_cost}}</span> {{sale_order.currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Exchange rate of selling day</td>
+            <td class="table-active"><span class="currency">{{sale_order.exchange_rate}}</span> {{sale_order.currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">FX Gains/Losses</td>
+            <td class="table-light"><span class="currency">{{final.fx_gains_losses}}</span></td>
+          </tr>
+               
+        </tbody>
+      </table>
+</div>
+
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <th>Date</th>
+            <th>Payment Type</th>
+            <th>Bank Account</th>
+            <th>Payment Reference</th>
+            <th>Payment Amount</th>
+            <th>Currency</th>
+            <th>Current Exchange Rate</th>
+            <th>Amount in Selling Currency</th>
+            <th>Balance</th>
+            <th>FX Gain/Loss</th>
+            </thead>
+            <tr style="background: skyblue;">
+                <td colspan="2">Opening Balance        </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>-<span class="currency">{{sale_order.total }}</span>       </td>
+                <td></td>
+            </tr>
+            {% for payment_received in payments_received %}
+            <tr>
+                <td>{{payment_received.payment_date}}</td>
+                <td>{{payment_received.payment_method}}</td>
+                <td>{{payment_received.bankaccount.bank_account_name}}</td>
+                <td>{{payment_received.order_invoice_no.order_invoice_no}}</td>
+                <td><span class="currency">{{payment_received.amount}}</span></td>
+                <td>{{payment_received.currency.abbreviation}}</td>
+                <td><span class="currency">{{payment_received.exchange_rate}}</span></td>
+                <td><span id="received{{forloop.counter}}" class="currency">{{ payment_received.amount|mul:payment_received.exchange_rate }}</span></td>
+                <td>-<span id="remaining{{forloop.counter}}" class="currency">{{payment_received.payment_remaining}}</span></td>
+                <td>{{sale_order.exchange_rate | sub:payment_received.exchange_rate }}</td>
+            </tr>
+            {% endfor %}
+
+            <tr style="background: skyblue;">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><span class="currency">{{final.total}}</span></td>
+                <td></td>
+                <td><span class="currency">{{final.exchange_rate}}</span></td>
+                <td><span id="received" class="currency">{{final.amount}}</span></td>
+                <td id="balance">-<span class="currency">{{final.balance}}</span></td>
+                <td><span class="currency">{{final.fx_gains_losses}}</span></td>
+            </tr>
+        </table>
+    </div>
+        <hr>
+        <table style="width:400px; line-height:30px;">
+            <thead>
+
+                <th>Profit</th>
+                <th>{{sale_order.currency.abbreviation}}</th>
+
+            </thead>
+
+
+
+            <tr>
+                <th>Sale Price</th>
+                <th><span class="currency">{{sale_order.total}} </span> {{sale_order.currency.abbreviation}}</th>
+            </tr>
+            <tr>
+                <th>Purchase Price</th>
+                <th><span class="currency">{{final.purchase_order_total}} </span> {{sale_order.purchase_order.seller_currency.abbreviation}}</th>
+            </tr>
+            <tr>
+                <th>Gross Profit</th>
+                <th><span class="currency">{{sale_order.gross_profit}}</span> {{sale_order.currency.abbreviation}}</th>
+            </tr>
+            <tr>
+                <th>FX Gains/Losses</th>
+                <th><span class="currency">{{final.fx_gains_losses}}</span></th>
+            </tr>
+
+            <tr>
+                <th>Net Profit</th>
+                <th><span class="currency">{{sale_order.total|sub:final.purchase_order_total|add:final.fx_gains_losses}}</span> {{sale_order.currency.abbreviation}}</th>
+            </tr>
+
+
+
+
+        </table>
+        <hr>
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+<script>
+    function round(value, exp) {
+  if (typeof exp === 'undefined' || +exp === 0)
+    return Math.round(value);
+
+  value = +value;
+  exp = +exp;
+
+  if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+    return NaN;
+
+  // Shift
+  value = value.toString().split('e');
+  value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+  // Shift back
+  value = value.toString().split('e');
+  return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+}
+
+var count = {{payments_received.count}}
+console.log(count)
+for(var i=1; i <=count; i++){
+
+    var val = round(parseFloat($("#remaining"+i).text()), 2)
+    console.log(val)
+    $("#remaining"+i).text(val)
+
+}
+
+for(var i=1; i <=count; i++){
+
+    var val = round(parseFloat($("#received"+i).text()), 2)
+    console.log(val)
+    $("#received"+i).text(val)
+
+}
+
+    var val = round(parseFloat($("#received").text()), 2)
+    $("#received").text(val)
+
+    var val = round(parseFloat($("#balance").text()), 2)
+    $("#balance").text(val)
+
+            let x = document.querySelectorAll(".currency");
+        for (let i = 0, len = x.length; i < len; i++) {
+            let num = Number(x[i].innerHTML)
+                      .toLocaleString('en');
+            x[i].innerHTML = num;
+
+        }
+
+
+
+</script>
+
+</body>
+</html>

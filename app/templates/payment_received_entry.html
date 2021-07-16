@@ -1,0 +1,687 @@
+{% include './includes/sidebar.html' %}
+
+{% load static %}
+<style>
+
+label span{
+
+    color:red;
+
+}
+
+.container2 {
+
+  margin: 20px auto;
+  user-select: none;
+  overflow-x: hidden;
+  position: relative;
+  border:1px solid #efefef;
+}
+    .header {
+  background-color: transparent;
+  text-align: center;
+  padding: 0.15rem;
+  color: #4e73df;
+}
+.header h1 {
+  font-size: 1.75rem;
+}
+.date {
+  background-color: #efefef;
+  text-align: right;
+  font-size: 0.75rem;
+  padding: 0.75rem 2rem 0.75rem 0;
+}
+ul.currencies {
+  height: calc(100vh - 40px - 100px - 40px - 58px);
+  background-color: #efefef;
+  padding: 0 1.5rem 1rem 1.5rem;
+  overflow-y: auto;
+}
+ul.currencies li {
+  background-color: white;
+  border-radius: 5px;
+  list-style: none;
+  padding: 1rem 1rem 0.75rem 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+ul.currencies li:last-child {
+  margin-bottom: 0;
+}
+ul.currencies li.base-currency {
+  background-color: #264d73;
+}
+.flag {
+  width: 50px;
+  height: 30px;
+  border: 1px solid #fff;
+  vertical-align: top;
+}
+.info {
+  display: inline-block;
+  width: 78%;
+}
+.info .input span {
+  font-size: 1.5rem;
+  display: inline-block;
+  width: 4rem;
+  text-align: center;
+}
+.info .input input {
+  font-size: 1rem;
+  width: 78%;
+  background-color: transparent;
+  border: 2px solid #858796;
+  border-radius: 5px;
+  color: #fff;
+
+}
+
+.info .currency-name {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  margin-left: 4rem;
+}
+.info .base-currency-rate {
+  font-size: 0.8rem;
+  margin-left: 4rem;
+}
+ul.currencies li .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 0.5rem;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+}
+ul.currencies li .close:hover {
+  color: #fff;
+}
+
+/* Scrollbar */
+ul.currencies::-webkit-scrollbar {
+  width: 5px;
+}
+ul.currencies::-webkit-scrollbar-thumb {
+  background-color: #2d2d37;
+  border-bottom: 1rem solid #222;
+}
+
+ul.add-currency-list {
+  position: absolute;
+  bottom: 54px;
+  left: 105%;
+  background-color: #f1f1f1;
+  color: #333;
+  width: 100%;
+  height: calc(100vh - 40px - 100px - 55px);
+  overflow-y: auto;
+  transition: all 0.25s;
+}
+ul.add-currency-list li {
+  list-style: none;
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+}
+ul.add-currency-list li.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+ul.add-currency-list li .flag {
+  width: 3rem;
+  height: 2rem;
+  vertical-align: middle;
+}
+ul.add-currency-list li span {
+  margin-left: 1rem;
+  font-weight: bold;
+}
+
+.add-currency-btn {
+  margin-top:-15px;
+  background-color: #4e73df;
+  color: #fff;
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-top: 3px solid #222;
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.25s;
+  position: relative;
+}
+.add-currency-btn i {
+  position: absolute;
+  top: 0.6rem;
+  left: 30%;
+  font-size: 2rem;
+  opacity: 0;
+  transition: all 0.25s;
+}
+
+.add-currency-btn.open {
+  background-color: #d9534f;
+}
+.add-currency-btn.open i {
+  opacity: 1;
+  left: 1.25rem;
+}
+.add-currency-btn.open + ul.add-currency-list {
+  left: 0;
+}
+.add-currency-btn.open + ul.add-currency-list li:hover {
+  background-color: #ddd;
+}
+
+@media (max-width: 600px) {
+  ul.currencies { height: calc(100vh - 83px - 34px - 51px); }
+  .header h1 { font-size: 2rem; }
+  .flag { width: 3rem; height: 2rem; }
+  .info .input span { font-size: 1.25rem; width: 3.5rem; }
+  .info .input input { font-size: 1.25rem; width: 76%;}
+  .info .currency-name { margin-left: 3.5rem; }
+  .info .base-currency-rate { margin-left: 3.5rem; }
+  ul.add-currency-list { bottom: 48px; height: calc(100vh - 80px - 51px); }
+  .add-currency-btn i { left: 25%; top:0.65rem; }
+}
+
+
+</style>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Add Payment Received Details</h1>
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <!-- Circle Buttons -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Payment Received Information</h6>
+                </div>
+                <div class="card-body">
+
+                    <div class=" container2">
+                        <div class="header">
+                            <h1>Exchange Rates</h1>
+                            <div>
+                                <marquee behavior="scroll" direction="left" class="text-dark">
+                                    <img src="{% static 'img/unitedflag.png' %}" alt=""> 1 USD =
+                                    <img src="{% static 'img/pakistan.png' %}" alt=""> <span id="USD">162</span> PKR &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/unitedflag.png' %}" alt=""> 1 USD =
+                                    <img src="{% static 'img/england.png' %}" alt=""> <span id="USD2">162</span> GBP &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/unitedflag.png' %}" alt=""> 1 USD =
+                                    <img src="{% static 'img/canada.png' %}" alt=""> <span id="USD3">162</span> CAD &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/unitedflag.png' %}" alt=""> 1 USD =
+                                    <img src="{% static 'img/euro.png' %}" alt=""> <span id="USD4">162</span> EUR &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    <img src="{% static 'img/pakistan.png' %}" alt=""> 1 PKR =
+                                    <img src="{% static 'img/canada.png' %}" alt=""> <span id="PKR">162</span> CAD  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/pakistan.png' %}" alt=""> 1 PKR =
+                                    <img src="{% static 'img/unitedflag.png' %}" alt=""> <span id="PKR2">162</span> USD  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/pakistan.png' %}" alt=""> 1 PKR =
+                                    <img src="{% static 'img/england.png' %}" alt=""> <span id="PKR3">162</span> GBP  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/pakistan.png' %}" alt=""> 1 PKR =
+                                    <img src="{% static 'img/euro.png' %}" alt=""> <span id="PKR4">162</span> EUR  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+                                    <img src="{% static 'img/canada.png' %}" alt=""> 1 CAD =
+                                    <img src="{% static 'img/pakistan.png' %}" alt=""> <span id="CAD">162</span> PKR  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/canada.png' %}" alt=""> 1 CAD =
+                                    <img src="{% static 'img/unitedflag.png' %}" alt=""> <span id="CAD2">162</span> USD  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/canada.png' %}" alt=""> 1 CAD =
+                                    <img src="{% static 'img/england.png' %}" alt=""> <span id="CAD3">162</span> GBP  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/canada.png' %}" alt=""> 1 CAD =
+                                    <img src="{% static 'img/euro.png' %}" alt=""> <span id="CAD4">162</span> EUR  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+                                    <img src="{% static 'img/england.png' %}" alt=""> 1 GBP =
+                                    <img src="{% static 'img/pakistan.png' %}" alt=""> <span id="GBP">162</span> PKR  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/england.png' %}" alt=""> 1 GBP =
+                                    <img src="{% static 'img/unitedflag.png' %}" alt=""> <span id="GBP2">162</span> USD  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/england.png' %}" alt=""> 1 GBP =
+                                    <img src="{% static 'img/canada.png' %}" alt=""> <span id="GBP3">162</span> CAD  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/england.png' %}" alt=""> 1 GBP =
+                                    <img src="{% static 'img/euro.png' %}" alt=""> <span id="GBP4">162</span> EUR  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+                                    <img src="{% static 'img/euro.png' %}" alt=""> 1 EURO =
+                                    <img src="{% static 'img/pakistan.png' %}" alt=""> <span id="EUR">162</span> PKR  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/euro.png' %}" alt=""> 1 EURO =
+                                    <img src="{% static 'img/unitedflag.png' %}" alt=""> <span id="EUR2">162</span> USD  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/euro.png' %}" alt=""> 1 EURO =
+                                    <img src="{% static 'img/canada.png' %}" alt=""> <span id="EUR3">162</span> CAD  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <img src="{% static 'img/euro.png' %}" alt=""> 1 EURO =
+                                    <img src="{% static 'img/england.png' %}" alt=""> <span id="EUR4">162</span> GBP  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+                                </marquee>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <form class="form" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table" border="0">
+                                    <tbody>
+
+
+                                    <tr>
+
+                                        <td><label>Order Invoice No</label></td>
+
+                                        <td>
+                                            <select id="order_invoice_no"  name="order_invoice_no" class="form-control"  required>
+                                                {% for sale_order in sale_orders %}
+                                                    <option value="{{sale_order.id}}">{{sale_order.display_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Payment Date<span>*</span></label></td>
+                                        <td>
+                                            <input class="form-control" type="date"  name="payment_date" required>
+
+
+                                        </td>
+                                    </tr>
+
+
+
+                                    <tr>
+                                        <td><label>Amount<span>*</span></label></td>
+                                        <td>
+                                            <input type="number" step="0.01" min="1"  class="form-control" name="amount" required>
+
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Currency<span>*</span></label></td>
+                                        <td>
+                                            <select id="currency" name="currency" class="form-control" required>
+
+                                                {% for currency in currencies %}
+
+                                                <option value="{{currency.id}}">{{currency.abbreviation}}</option>
+
+                                                {% endfor %}
+
+                                            </select>
+                                        </td>
+                                    </tr>
+
+
+
+                                    <tr>
+
+                                        <td><label>Bank Account For Payment<span>*</span></label></td>
+                                        <td>
+                                            <select name="bankaccount" class="form-control" required>
+
+                                                {% for bankaccount in bankaccounts %}
+
+                                                <option value="{{bankaccount.id}}">({{bankaccount.currency.abbreviation}}) {{bankaccount.bank_account_id}}</option>
+
+                                                {% endfor %}
+
+                                            </select>
+                                        </td>
+                                    </tr>
+
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table" border="0">
+                                    <tbody>
+
+
+
+
+                                    <tr>
+                                        <td><label>Payment Method<span>*</span></label></td>
+                                        <td>
+                                            <select  name="payment_method" class="form-control" id="mySelect" required>
+
+                                                <option value="Cash Transfer">Cash Transfer</option>
+                                                <option value="Bank Transfer">Bank Transfer</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td><label>Banking Charges<span>*</span></label></td>
+
+                                        <td><input type="number" name="banking_charges" step="0.0001" value="20.0" class="form-control" required>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td><label>Amount Received (Applied Banking Charges)<span>*</span></label></td>
+
+                                        <td><input type="number" name="amount_received" step="0.0001" class="form-control" required>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+
+                                        <td><label>Exchange Rate<span>*</span></label></td>
+                                        <td><input id="exchange_rate" type="number" name="exchange_rate" min="0" step="0.0001" class="form-control" required>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td><label>Pdf Attachment</label></td>
+                                        <td><input type="file" name="pdf_attachment_box" class="form-control">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+
+                                        <td><label>Notes</label></td>
+                                        <td>
+                                            <textarea name="notes" class="form-control" rows="2">
+                                            </textarea>
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-md-12 form-group">
+                                <button type="submit" class="btn btn-primary form-control">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Brand Buttons -->
+
+        </div>
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; EuroAsia Dashboard 2020</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<div class="modal fade" id="errors" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Request Unsuccessful!!</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">{{errors}}</div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Go back</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Request Successful</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Your response has been recorded sucessfully</div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" data-dismiss="modal">Go back</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+{% if message %}
+<script>
+
+    $("#message").modal('show');
+  </script>
+{% endif %}
+
+{% if errors %}
+<script>
+
+    $("#errors").modal('show');
+  </script>
+{% endif %}
+
+
+<script>
+
+var currency="";
+function getOrder(order_invoice_no){
+
+    console.log(order_invoice_no);
+
+    $.ajax({
+        url: '/get_order_invoice_no/',
+        data: {
+          'order_invoice_no': order_invoice_no
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.currency) {
+                console.log(data.currency);
+                currency = data.currency;
+
+          }
+        }
+     });
+
+
+
+}
+
+
+function round(value, exp) {
+  if (typeof exp === 'undefined' || +exp === 0)
+    return Math.round(value);
+
+  value = +value;
+  exp = +exp;
+
+  if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+    return NaN;
+
+  // Shift
+  value = value.toString().split('e');
+  value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+  // Shift back
+  value = value.toString().split('e');
+  return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+}
+
+$.get( "https://api.exchangeratesapi.io/latest?base=USD", function(data ) {
+
+    $("#USD2").text(round(data.rates.GBP,2))
+    $("#USD3").text(round(data.rates.CAD,2))
+    $("#USD4").text(round(data.rates.EUR,2))
+
+});
+
+
+$.get( "https://api.exchangeratesapi.io/latest?base=CAD", function(data ) {
+
+    $("#CAD2").text(round(data.rates.USD,2))
+    $("#CAD3").text(round(data.rates.GBP,2))
+    $("#CAD4").text(round(data.rates.EUR,2))
+
+});
+
+$.get( "https://api.exchangeratesapi.io/latest?base=GBP", function(data ) {
+
+    $("#GBP2").text(round(data.rates.USD,2))
+    $("#GBP3").text(round(data.rates.CAD,2))
+    $("#GBP4").text(round(data.rates.EUR,2))
+
+});
+
+
+$.get( "https://api.exchangeratesapi.io/latest?base=EUR", function(data ) {
+
+    $("#EUR2").text(round(data.rates.USD,2))
+    $("#EUR3").text(round(data.rates.CAD,2))
+    $("#EUR4").text(round(data.rates.GBP,2))
+
+});
+
+
+$.get( "https://free.currconv.com/api/v7/convert?q=USD_PKR&compact=ultra&apiKey=09f3614f2114cc39361f", function( data ) {
+  console.log(data.USD_PKR)
+  $("#USD").text(round(data.USD_PKR,2))
+});
+
+
+$.get( "https://free.currconv.com/api/v7/convert?q=EUR_PKR&compact=ultra&apiKey=09f3614f2114cc39361f", function( data ) {
+  $("#EUR").text(round(data.EUR_PKR,2))
+});
+
+
+$.get( "https://free.currconv.com/api/v7/convert?q=GBP_PKR&compact=ultra&apiKey=09f3614f2114cc39361f", function( data ) {
+
+   $("#GBP").text(round(data.GBP_PKR,2))
+});
+
+
+
+$.get( "https://free.currconv.com/api/v7/convert?q=CAD_PKR&compact=ultra&apiKey=09f3614f2114cc39361f", function( data ) {
+ $("#CAD").text(round(data.CAD_PKR,2))
+});
+
+$.get( "https://free.currconv.com/api/v7/convert?q=PKR_CAD&compact=ultra&apiKey=f16c12803234e5c11e25", function( data ) {
+ $("#PKR").text(round(data.PKR_CAD,4))
+});
+
+
+
+$.get( "https://free.currconv.com/api/v7/convert?q=PKR_USD&compact=ultra&apiKey=f16c12803234e5c11e25", function( data ) {
+ $("#PKR2").text(round(data.PKR_USD,4))
+});
+
+
+
+
+$.get( "https://free.currconv.com/api/v7/convert?q=PKR_GBP&compact=ultra&apiKey=f16c12803234e5c11e25", function( data ) {
+ $("#PKR3").text(round(data.PKR_GBP,4))
+});
+
+
+$.get( "https://free.currconv.com/api/v7/convert?q=PKR_EUR&compact=ultra&apiKey=f16c12803234e5c11e25", function( data ) {
+ $("#PKR4").text(round(data.PKR_EUR,4))
+});
+
+
+getOrder($("#order_invoice_no option:selected").val())
+
+$("#order_invoice_no").change(function(){
+    getOrder($("#order_invoice_no option:selected").val())
+    var val1 = $( "#currency option:selected" ).text();
+      var val2 = currency;
+      var curr  = val1+"_"+val2;
+
+      $.get( "https://free.currconv.com/api/v7/convert?q="+curr+"&compact=ultra&apiKey=f16c12803234e5c11e25", function( data ) {
+            $("#exchange_rate").val(round(data[curr], 4));
+
+    });
+
+
+});
+
+$("#currency").change(function(){
+  var val1 = $( "#currency option:selected" ).text();
+  var val2 = currency;
+  var curr  = val1+"_"+val2;
+
+  $.get( "https://free.currconv.com/api/v7/convert?q="+curr+"&compact=ultra&apiKey=f16c12803234e5c11e25", function( data ) {
+        $("#exchange_rate").val(round(data[curr], 4));
+
+});
+
+});
+
+
+
+
+
+</script>
+
+</body>
+
+</html>

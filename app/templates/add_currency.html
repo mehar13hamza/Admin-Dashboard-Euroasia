@@ -1,0 +1,157 @@
+{% include './includes/sidebar.html' %}
+
+{% load static %}
+<style>
+
+
+
+
+
+</style>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Add A Currency</h1>
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <!-- Circle Buttons -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Currency Information</h6>
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <table class="table" border="0">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+
+                                        <label>Currency Name</label>
+                                        <input type="text" name="currency_name" class="form-control" required>
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="form-group">
+
+                                        <label>Currency Symbol</label>
+                                        <input type="text" name="currency_symbol" placeholder="e.g (PKR)" class="form-control" required>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+
+                                        <label>Currency Abbreviation</label>
+                                        <input type="text" name="abbreviation" placeholder="e.g (USD)" class="form-control" required>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+
+            <!-- Brand Buttons -->
+
+        </div>
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; EuroAsia Dashboard 2020</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+<div class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Request Successful</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Your response has been recorded sucessfully</div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" data-dismiss="modal">Go back</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Logout Modal-->
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+{% if message %}
+<script>
+
+    $("#message").modal('show');
+  </script>
+{% endif %}
+
+<script>
+    $(document).ready(function(){ //Make script DOM ready
+    $('#mySelect').change(function() { //jQuery Change Function
+        var opval = $(this).val(); //Get value from select element
+        if(opval=="Bank Transfer"){ //Compare it and if true
+            $('#formModal').modal("show"); //Open Modal
+        }
+    });
+
+
+});
+</script>
+
+</body>
+
+</html>

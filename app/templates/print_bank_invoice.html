@@ -1,0 +1,184 @@
+{% load static %}
+{% load mathfilters %}
+<html>
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <style>
+
+            body{
+                font-family:font-family: Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+            }
+
+            hr{
+                background:rgb(204, 255, 204,0.3);
+            }
+
+            @media print {
+                 #printpg{
+                    display: none;
+                 }
+            }
+
+        </style>
+    <style type="text/css" media="print">
+            @page {
+                size: auto;   /* auto is the initial value */
+                margin: 0;  /* this affects the margin in the printer settings */
+            }
+        </style>
+</head>
+<body>
+<br><br>
+<section class="content content_content" style="width: 70%; margin: auto;">
+    <section class="invoice">
+        <!-- title row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <i class="fa fa-globe"></i> EuroAsia Co.
+                    <small class="pull-right" style="margin-left:100px; float: right;">Date:<span id="today-date"> 2017/01/09</span></small>
+                </h2>
+                <address>
+                    EuroAsia <br>
+                    03223212 <br>
+                    K block Dha Phase 2 Lahore Cantt <br>
+                    johndoe@gmail.com <br>
+                </address>
+            </div><!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+            <div class="col-sm-4 invoice-col">
+
+                <address>
+                    <strong>
+                        {{bank.bank_account_name}}                                      </strong>
+                    <br>
+                    {{bank.bank_account_address}}<br>
+                    {{bank.city}}                                    <br>
+                    {{bank.postal_code}}                                    <br>
+
+                </address>
+            </div><!-- /.col -->
+            <br>
+
+        </div><!-- /.row -->
+
+        <!-- Table row -->
+        <div class="row">
+            <div class="col-xs-12 table-responsive">
+                <table class="table">
+                    <thead style="background:rgb(204, 255, 204,0.3);">
+                        <tr>
+                            <th style="text-align:center;">Opening Balance</th>
+                            <th style="text-align:center;">Closing Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th style="text-align:center;">0</th>
+                            <th style="text-align:center;">{{total}}</th>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Currency</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for d in details %}
+                    <tr>
+                        <td>{{d.date}}</td>
+                        <td>{{d.description}}</td>
+                        <td><span class="currency">{{d.debit}}</span></td>
+                        <td><span class="currency">{{d.credit}}</span></td>
+                        <td>{{d.currency}}</td>
+                        <td style="background:rgb(204, 255, 204,0.3);"><span class="currency">{{d.total}}</span></td>
+
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <img src="{% static 'img/sign.png' %}" width="15%" style="float: right;" alt="">
+            </div>
+        </div>
+        <hr>
+        <div class="row" style="font-size: 10px; margin-bottom: 50px;">
+            <div class="col-md-3 col-sm-3 col-xs-3" style="border-right: 1px solid black; padding-top: 25px;">
+                Incorporated in England & Wales<br>Corporation Number: 5270419
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-3" style="border-right: 1px solid black;">
+                EURO ACCOUNT<br>
+                Account Title: EURO ASIA TRADING LTD.<br>
+                Bank Name: HSBC UK Banck PLC<br>
+                Account Number: 401276-5119653<br>
+                BIC: HBUKGB4B<br>
+                IBAN: GB66HBUK40127659119653
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-3" style="border-right: 1px solid black;">
+                GBP ACCOUNT<br>
+                Account Title: EURO ASIA TRADING LTD.<br>
+                Bank Name: HSBC UK Banck PLC<br>
+                Account Number: 401841-02304031<br>
+                BIC: HBUKGB4B<br>
+                IBAN: GB62HBUK40184102304031
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-3">
+                USD ACCOUNT<br>
+                Account Title: EURO ASIA TRADING LTD.<br>
+                Bank Name: HSBC UK Banck PLC<br>
+                Account Number: 401276-59119645<br>
+                BIC: HBUKGB4B<br>
+                IBAN: GB62HBUK40127659119645
+            </div>
+        </div>
+        <!-- this row will not appear when printing -->
+        <div class="row no-print">
+            <div class="col-xs-12">
+                <button id="printpg" onclick="window.print()" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Print Report</button>
+            </div>
+        </div>
+    </section>
+</section>
+
+
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+
+                var date = new Date();
+                $("#today-date").text(date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear());
+                var num = Date.now();
+                var id = (num.toString()).replace(/^.{5}/,'')
+                console.log(id);
+                $("#id").text(id)
+                        let x = document.querySelectorAll(".currency");
+                        for (let i = 0, len = x.length; i < len; i++) {
+                            let num = Number(x[i].innerHTML)
+                                      .toLocaleString('en');
+                            x[i].innerHTML = num;
+
+                  }
+            </script>
+
+
+
+</body>
+
+</html>

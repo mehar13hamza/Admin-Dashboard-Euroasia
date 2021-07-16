@@ -1,0 +1,189 @@
+{% include './includes/sidebar.html' %}
+{% load static %}
+{% load mathfilters %}
+<style>
+    table td{
+        /* text-align: center; */
+        color: black;
+    }
+    .table {
+        border-top: none;
+    }
+    .container{
+        margin-bottom: 30px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-xs-12">
+            <h2 class="text-dark">
+              Purchase Order {{purchase_order.display_name}}
+            </h2>
+        </div>
+        <div class="col-md-2 col-xs-12">
+            <a href="{% url 'print_purchase_order' id=purchase_order.id %}"   class="btn btn-danger form-control" target="_blank">Print</a>
+        </div>
+    </div>
+</div>
+
+<div class="container table-responsive-sm">
+    <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Order Invoice No</td>
+            <td class="table-primary">{{purchase_order.order_receipt_no}}</td>
+          </tr>      
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Seller Company</td>
+            <td class="table-danger">{{purchase_order.seller.seller_company}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Date of Purchase</td>
+            <td class="table-success">{{purchase_order.order_date}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Purchase Amount</td>
+            <td class="table-info">{{purchase_order.seller_currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Purchase Currency</td>
+            <td class="table-warning">{{purchase_order.seller_currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Advance</td>
+            <td class="table-active">{{purchase_order.advance_currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Advance Currency</td>
+            <td class="table-secondary">{{purchase_order.advance_currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Exchange rate of purchasing day</td>
+            <td class="table-light"><span class="currency">{{purchase_order.exchange_rate}}</span> {{purchase_order.seller_currency.abbreviation}}</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Material</td>
+            <td class="table-warning">Nan</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Purchase Quantity</td>
+            <td class="table-primary">Nan</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Unit</td>
+            <td class="table-danger">Nan</td>
+          </tr>
+          <tr>
+            <td style="font-size: 20px; font-weight: 500;  ">Purchase Quantity Per unit</td>
+            <td class="table-success">Nan</td>
+          </tr>
+               
+        </tbody>
+      </table>
+</div>
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <th>Date</th>
+            <th>Bank Account</th>
+            <th>Payment Reference</th>
+            <th>Payment Amount</th>
+            <th>Currency</th>
+            <th>Current Exchange Rate</th>
+            <th>Amount in Buyer Currency</th>
+            <th>Balance</th>
+            <th>FX Gain/Loss</th>
+            </thead>
+            <tr style="background: skyblue;">
+                <td colspan="2">Opening Balance        </td>
+
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>-{{purchase_order.total }}       </td>
+                <td></td>
+            </tr>
+            {% for payment_made in payments_made %}
+            <tr>
+                <td>{{payment_made.payment_date}}</td>
+                <td>{{payment_made.bankaccount.bank_account_name}}</td>
+                <td></td>
+                <td><span class="round currency">{{payment_made.amount}}</span></td>
+                <td>{{payment_made.currency.abbreviation}}</td>
+                <td>{{payment_made.exchange_rate}}</td>
+                <td><span class="round currency">{{ payment_made.amount|mul:payment_made.exchange_rate }}</span></td>
+                <td>-<span class="round currency">{{payment_made.payment_remaining}}</span></td>
+                <td><span class="round currency">{{payment_made.exchange_rate | sub:purchase_order.exchange_rate }}</span></td>
+            </tr>
+            {% endfor %}
+
+            <tr style="background: skyblue;">
+                <td></td>
+
+                <td></td>
+                <td></td>
+                <td>{{final.total}}</td>
+                <td></td>
+                <td>{{final.exchange_rate}}</td>
+                <td><span class="round currency">{{final.amount}}</span></td>
+                <td class="round currency">-{{final.balance}}</td>
+                <td class="round currency">{{final.fx_gains_losses}}</td>
+            </tr>
+        </table>
+</div>
+
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+<script>
+    function round(value, exp) {
+  if (typeof exp === 'undefined' || +exp === 0)
+    return Math.round(value);
+
+  value = +value;
+  exp = +exp;
+
+  if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+    return NaN;
+
+  // Shift
+  value = value.toString().split('e');
+  value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+  // Shift back
+  value = value.toString().split('e');
+  return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+}
+
+let x = document.querySelectorAll(".round");
+        for (let i = 0, len = x.length; i < len; i++) {
+            let num = round(parseFloat(x[i].innerHTML), 2);
+            x[i].innerHTML = num;
+
+        }
+
+
+ x = document.querySelectorAll(".currency");
+        for (let i = 0, len = x.length; i < len; i++) {
+            let num = Number(x[i].innerHTML)
+                      .toLocaleString('en');
+            x[i].innerHTML = num;
+
+        }
+
+
+</script>
+</body>
+</html>

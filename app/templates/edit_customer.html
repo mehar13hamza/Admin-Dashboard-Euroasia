@@ -1,0 +1,293 @@
+{% include './includes/sidebar.html' %}
+
+{% load static %}
+<style>
+
+
+    label span{
+
+        color: red;
+    }
+
+
+
+</style>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Edit A Customer</h1>
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <!-- Circle Buttons -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Customer Information</h6>
+                </div>
+                <div class="card-body">
+                    <form class="form" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table" border="0">
+                                    <tbody>
+
+
+                                    <tr>
+
+                                        <td><label>Customer Id</label></td>
+
+                                        <td><input type="text" name="customer_id" value="{{customer.customer_id}}" class="form-control" required readonly>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Customer Name<span>*</span></label></td>
+                                        <td><input type="text" name="customer_name" value="{{customer.customer_name}}" class="form-control" required>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Customer Phone</label></td>
+                                        <td><input type="text" name="customer_phone" value="{{customer.customer_phone}}" class="form-control">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Customer Type<span>*</span></label></td>
+                                        <td><input type="text" name="customer_type" value="{{customer.customer_type}}" class="form-control" required>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Customer Mobile</label></td>
+                                        <td><input type="text" name="customer_mobile" value="{{customer.customer_mobile}}" class="form-control">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Customer Fax</label></td>
+                                        <td><input type="text" name="customer_fax" value="{{customer.customer_fax}}" class="form-control">
+                                        </td>
+                                    </tr>
+
+
+
+
+                                    <tr>
+                                        <td><label>Billing Address<span>*</span></label></td>
+                                        <td><textarea name="billing_address" class="form-control" required>{{customer.billing_address}}</textarea>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td><label>Shipping Address<span>*</span></label></td>
+                                        <td><textarea name="shipping_address" class="form-control" required>{{customer.shipping_address}}</textarea>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td><label>City</label></td>
+                                        <td><input type="text" name="city" class="form-control" value="{{customer.city}}">
+                                        </td>
+                                    </tr>
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table" border="0">
+                                    <tbody>
+
+
+
+
+                                    <tr>
+                                        <td><label>Country</label></td>
+                                        <td><input type="text" name="country" class="form-control" value="{{customer.country}}">
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td><label>Postal Code</label></td>
+                                        <td><input type="text" name="postal_code" value="{{customer.postal_code}}" class="form-control">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Account Currency<span>*</span></label></td>
+                                        <td>
+                                            <select name="currency" class="form-control" required>
+
+                                                {% for currency in currencies %}
+                                                {% if currency.id == customer.currency.id %}
+                                                <option value="{{currency.id}}" selected>{{currency.currency_name}} ({{currency.currency_symbol}})</option>
+                                                {% else %}
+                                                <option value="{{currency.id}}">{{currency.currency_name}} ({{currency.currency_symbol}})</option>
+                                                {% endif %}
+                                                {% endfor %}
+
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Customer Account IBAN</label></td>
+                                        <td><input type="text" name="bank_account_iban" value="{{customer.bank_account_iban}}" class="form-control">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Customer Account Title</label></td>
+                                        <td><input type="text" name="bank_account_title" value="{{customer.bank_account_title}}" class="form-control">
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Opening Balance<span>*</span></label></td>
+                                        <td><input type="number" name="opening_balance" step="0.0001" value="{{customer.opening_balance}}" class="form-control" required>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td><label>Pdf Attachment</label></td>
+                                        <td><input type="file" name="pdf_attachment_box" class="form-control">
+                                        </td>
+                                    </tr>
+
+
+
+                                    <tr>
+                                        <td><label>Notes</label></td>
+                                        <td><input type="text" name="notes" value="{{customer.notes}}" class="form-control">
+                                        </td>
+                                    </tr>
+
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-md-12 form-group">
+                                <button type="submit" class="btn btn-primary form-control">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Brand Buttons -->
+
+        </div>
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; EuroAsia Dashboard 2020</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+
+<div class="modal fade" id="errors" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Request Unsuccessful!!</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">{{errors}}</div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Go back</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Request Successful</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Your response has been recorded sucessfully</div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" data-dismiss="modal">Go back</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Logout Modal-->
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+{% if message %}
+<script>
+
+    $("#message").modal('show');
+  </script>
+{% endif %}
+
+
+
+{% if errors %}
+<script>
+
+    $("#errors").modal('show');
+  </script>
+{% endif %}
+
+
+
+</body>
+
+</html>

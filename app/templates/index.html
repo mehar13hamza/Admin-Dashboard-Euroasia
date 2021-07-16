@@ -1,0 +1,577 @@
+{% include './includes/sidebar.html' %}
+{% load static %}
+<style>
+  table tr{
+    font-size: 12px;
+    font-weight: 800;
+  }
+</style>
+<!-- Content Wrapper -->
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+
+  </div>
+
+  <!-- Content Row -->
+  <div class="row">
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Revenue (Last Month)</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800 currency round">{{monthly_earnings}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Revenue (Last Year)</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800 currency round">{{yearly_earnings}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Receivables</div>
+              <div class="row no-gutters align-items-center">
+                <div class="col-auto">
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{receivables.count}}</div>
+                </div>
+
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Payables</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{payables.count}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-comments fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  <!-- Pending Requests Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-danger shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Expenses</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{expenses.count}}</div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-receipt fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Content Row -->
+
+  <div class="row">
+
+    <!-- Content Column -->
+    <div class="col-lg-12 mb-4">
+
+      <!-- Project Card Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Total Gross Profit In Each Currency <span class="float-right"><a href="{% url 'gross_profit_details' %}">See Full details</a></span></h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+              <div class="col-lg-6">
+              </div>
+              <div class="col-lg-6">
+                <select name="" class="form-control">
+                  <option value="all">
+                    All Time
+                  </option>
+                  <option value="weekly">
+                    Weekly - 7 days
+                  </option>
+                  <option value="monthly">
+                    Monthly - Next 30 Days
+                  </option>
+                  <option value="theee-month">
+                    Next Three Months - Next 90 Days
+                  </option>
+                </select>
+              </div>
+          </div>
+          <br>
+          <h4 class="small font-weight-bold"><img src="{% static 'img/unitedflag.png' %}" alt=""> USD<span class="float-right"><span class="currency">{{gross_profits.gross_profit_usd}}</span> USD</span> </h4>
+          <div class="progress mb-4">
+            <div class="progress-bar bg-{% if gross_profits_per.pkr_per < 20 %}danger{% elif gross_profits_per.pkr_per < 60 %}warning{% else %}success{% endif %}" role="progressbar" style="width: gross_profits_per.usd_per%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <h4 class="small font-weight-bold"><img src="{% static 'img/pakistan.png' %}" alt=""> PKR <span class="float-right"><span class="currency">{{gross_profits.gross_profit_pkr}}</span> PKR</span></h4>
+          <div class="progress mb-4">
+            <div class="progress-bar bg-{% if gross_profits_per.pkr_per < 20 %}danger{% elif gross_profits_per.pkr_per < 60 %}warning{% else %}success{% endif %}" role="progressbar" style="width: {{gross_profits_per.pkr_per}}%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <h4 class="small font-weight-bold"><img src="{% static 'img/england.png' %}" alt=""> GBP <span class="float-right"><span class="currency">{{gross_profits.gross_profit_gbp}}</span> GBP</span></h4>
+          <div class="progress mb-4">
+            <div class="progress-bar bg-{% if gross_profits_per.gbp_per < 20 %}danger{% elif gross_profits_per.gbp_per < 60 %}warning{% else %}success{% endif %}" role="progressbar" style="width: {{gross_profits_per.gbp_per}}%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+
+
+          <h4 class="small font-weight-bold"><img src="{% static 'img/canada.png' %}" alt=""> CAD <span class="float-right"><span class="currency">{{gross_profits.gross_profit_cad}}</span> CAD</span></h4>
+          <div class="progress mb-4">
+            <div class="progress-bar bg-{% if gross_profits_per.cad_per < 20 %}danger{% elif gross_profits_per.cad_per < 60 %}warning{% else %}success{% endif %}" role="progressbar" style="width: {{gross_profits_per.cad_per}}%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+
+
+
+          <h4 class="small font-weight-bold"><img src="{% static 'img/euro.png' %}" alt=""> EUR <span class="float-right"><span class="currency">{{gross_profits.gross_profit_eur}}</span> EUR</span></h4>
+          <div class="progress mb-4">
+            <div class="progress-bar bg-{% if gross_profits_per.eur_per < 20 %}danger{% elif gross_profits_per.eur_per < 60 %}warning{% else %}success{% endif %}" role="progressbar" style="width: {{gross_profits_per.eur_per}}%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="row">
+
+
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Receiveables</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{receivables.count}}</div>
+            </div>
+            <div class="col-auto">
+              <select name="" id="receivable-bar" class="form-control">
+                <option value="0">
+                  All Time
+                </option>
+                <option value="1">
+                  Next Month
+                </option>
+                <option value="2">
+                  Next 2 Months
+                </option>
+                <option value="3">
+                  Next 3  Months
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <table class="table text-dark">
+              <thead>
+              <th>
+                Id
+              </th>
+              <th>
+                Name
+              </th>
+              <th>
+                Order Date
+              </th>
+              <th>
+                Payment Due Date
+              </th>
+              <th>
+                Rem. Balance
+              </th>
+              </thead>
+              <tbody id="sale_orders">
+              {% for receivable in receivables %}
+              <tr>
+                <td>
+                  {{receivable.order_invoice_no}}
+                </th>
+                <td>
+                  {{receivable.customer.customer_name}}
+                </td>
+                <td>
+                  {{receivable.date_of_arrival}}
+                </td>
+                <td>
+                  {{receivable.payment_due_date}}
+                </td>
+                <td>
+                  <span class="currency round">{{receivable.payment_remaining}}</span> {{receivable.currency.abbreviation}}
+                </td>
+
+              </tr>
+              {% endfor %}
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Payables</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{payables.count}}</div>
+            </div>
+            <div class="col-auto">
+              <select name="" class="form-control">
+                <option value="all">
+                  All Time
+                </option>
+                <option value="weekly">
+                  Weekly - 7 days
+                </option>
+                <option value="monthly">
+                  Monthly - Next 30 Days
+                </option>
+                <option value="theee-month">
+                  Next Three Months - Next 90 Days
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <table class="table text-dark">
+              <thead>
+              <th>
+                Id
+              </th>
+              <th>
+                Name
+              </th>
+              <th>
+                Order Date
+              </th>
+              <th>
+                Payment Due Date
+              </th>
+              <th>
+                Rem. Balance
+              </th>
+              </thead>
+
+              {% for payable in payables %}
+              <tr>
+                <td>
+                  {{payable.order_receipt_no}}
+                </th>
+                <td>
+                  {{payable.seller.seller_company}}
+                </td>
+                <td>
+                  {{payable.order_date}}
+                </td>
+                <td>
+                  {{payable.payment_due_date}}
+                </td>
+                <td>
+                  <span class="currency round">{{payable.payment_remaining}}</span> {{payable.seller_currency.abbreviation}}
+                </td>
+
+              </tr>
+              {% endfor %}
+
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-4">
+      <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Expenses</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{expenses.count}}</div>
+            </div>
+            <div class="col-auto">
+              <select name="" id="" class="form-control">
+                <option value="all">
+                  All Time
+                </option>
+                <option value="weekly">
+                  Weekly - 7 days
+                </option>
+                <option value="monthly">
+                  Monthly - Next 30 Days
+                </option>
+                <option value="theee-month">
+                  Next Three Months - Next 90 Days
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <table class="table text-dark">
+              <thead>
+              <th>
+                Id
+              </th>
+              <th>
+                Name
+              </th>
+              <th>
+                Order Date
+              </th>
+              <th>
+                Rem. Balance
+              </th>
+              </thead>
+
+              {% for expense in expenses %}
+              <tr>
+                <td>
+                  {{expense.expense_id}}
+                </th>
+                <td>
+                  {{expense.expense_type}}
+                </td>
+                <td>
+                  {{expense.expense_date}}
+                </td>
+                <td>
+                  <span class="currency round">{{expense.payment_remaining}}</span> {{expense.currency.abbreviation}}
+                </td>
+
+              </tr>
+              {% endfor %}
+
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Bank Accounts Net Balance</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+            </div>
+
+          </div>
+          <div class="row">
+            <table class="table text-dark">
+              <thead>
+              <th>
+                Id
+              </th>
+              <th>
+                Name
+              </th>
+              <th>
+                Net Balance
+              </th>
+              </thead>
+
+              {% for bank in banks_net %}
+              <tr>
+                <td>
+                  <a target="_blank" href="{% url 'print_bank_invoice' id=bank.id %}">{{bank.bank_account_id}}</a>
+                </th>
+                <td>
+                  {{bank.bank_account_name}}
+                </td>
+                <td>
+                  <span class="currency">{{bank.net_balance}}</span>
+                </td>
+
+              </tr>
+              {% endfor %}
+
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+  </div>
+
+
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+  <div class="container my-auto">
+    <div class="copyright text-center my-auto">
+      <span>Copyright &copy; EuroAsia Dashboard 2020</span>
+    </div>
+  </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+<!-- Page level plugins -->
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+<script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+<script>
+
+  function round(value, exp) {
+  if (typeof exp === 'undefined' || +exp === 0)
+    return Math.round(value);
+
+  value = +value;
+  exp = +exp;
+
+  if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+    return NaN;
+
+  // Shift
+  value = value.toString().split('e');
+  value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+  // Shift back
+  value = value.toString().split('e');
+  return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+}
+
+let x = document.querySelectorAll(".round");
+        for (let i = 0, len = x.length; i < len; i++) {
+            let num = round(parseFloat(x[i].innerHTML), 2);
+            x[i].innerHTML = num;
+
+        }
+
+
+ x = document.querySelectorAll(".currency");
+        for (let i = 0, len = x.length; i < len; i++) {
+            let num = Number(x[i].innerHTML)
+                      .toLocaleString('en');
+            x[i].innerHTML = num;
+
+        }
+
+
+
+function getSaleOrder(date){
+
+    $.ajax({
+        url: '/get_next_sale_order/',
+        data: {
+          'date': date
+        },
+        dataType: 'json',
+        success: function (data) {
+          data_sale = JSON.parse(data.sale_orders);
+              $("#sale_orders").empty();
+              for (var d=0; d < data_sale.length; d++){
+                console.log(data_sale[d]);
+                var htm = "<tr><td>"+data_sale[d].fields.order_invoice_no+"</td><td>"+"</td><td>"+data_sale[d].fields.order_date+"</td><td>"+data_sale[d].fields.payment_due_date+"</td><td><span class='currency round'>"+data_sale[d].fields.payment_remaining+"</span></td></tr>"
+                console.log(htm);
+                $("#sale_orders").append(htm);
+              }
+        }
+     });
+
+
+
+}
+
+$("#receivable-bar").change(function(){
+
+
+  date = $("#receivable-bar option:selected").val();
+  getSaleOrder(date);
+
+});
+</script>
+
+
+
+</body>
+
+</html>

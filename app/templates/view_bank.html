@@ -1,0 +1,142 @@
+{% include './includes/sidebar.html' %}
+
+<style>
+
+    table{
+        border-left:none !important;
+        border-right:none !important;
+
+    }
+
+    th{
+            border-left:none !important;
+        border-right:none !important;
+
+    }
+
+    tbody{
+
+        border-left:none !important;
+        border-right:none !important;
+
+    }
+    tbody td{
+            border-left:none !important;
+        border-right:none !important;
+
+
+    }
+
+</style>
+
+{% load static %}
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800"><i class="fas fa-money-check-alt"></i> All Bank Accounts</h1>
+    <p class="mb-4">This is a list of all bank accounts</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Bank Account Information</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Actions</th>
+                        <th>Bank Account IBAN</th>
+                        <th>Bank Account Title</th>
+                        <th>Bank Account Name</th>
+                        <th>Bank Account Address</th>
+                        <th>Account Currency</th>
+
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for bankaccount in bankaccounts %}
+                    <tr>
+                        <td style="padding:15px;">
+                            <div class="row">
+
+                                <div class="col-md-6 col-xs-6">
+                                    <a href="{% url 'edit_bank' id=bankaccount.id %}" data-toggle="tooltip" title="Edit" class="btn btn-warning btn-circle btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-6 col-xs-6">
+                                    <a href="{% url 'delete_bank' id=bankaccount.id %}" data-toggle="tooltip" title="Delete"  class="btn btn-danger btn-circle btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </td>
+                        <td><a href="{% url 'individual_bank' id=bankaccount.id %}">{{bankaccount.bank_account_id}}</a></td>
+                        <td>{{bankaccount.bank_account_title}}</td>
+                        <td>{{bankaccount.bank_account_name}}</td>
+                        <td>{{bankaccount.bank_account_address}}</td>
+                        <td>{{bankaccount.currency.abbreviation}}</td>
+
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; EuroAsia Dashboard 2020</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+<!-- Page level plugins -->
+
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+
+</body>
+
+</html>

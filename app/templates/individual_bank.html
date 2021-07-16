@@ -1,0 +1,227 @@
+{% include './includes/sidebar.html' %}
+
+<style>
+
+    th{
+            border-left:none !important;
+        border-right:none !important;
+
+    }
+
+    tbody{
+
+        border-left:none !important;
+        border-right:none !important;
+
+    }
+    tbody td{
+            border-left:none !important;
+        border-right:none !important;
+
+
+    }
+
+</style>
+
+{% load static %}
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Bank Information</h1>
+    <p class="mb-4">These are details for the Bank</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Bank details</h6>
+        </div>
+        <div class="card-body">
+
+
+            <div class="row d-flex justify-content-center">
+                <div class="">
+                    <div class="col-md-12">
+
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Accordion -->
+                            <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                <h6 class="m-0 font-weight-bold text-primary">{{bankaccount.bank_account_name}}</h6>
+                            </a>
+                            <!-- Card Content - Collapse -->
+                            <div class="collapse show" id="collapseCardExample">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-center">
+                                        <img src="{% static 'img/bank.png' %}" style="border-radius:50%; height:250px; width:250px;" />
+                                    </div>
+                                    <br>
+
+                                    <table class="table" border="0">
+                                        <tbody>
+                                        <tr>
+                                            <td><strong>Bank Account IBAN</strong></td>
+                                            <td align="center">{{bankaccount.bank_account_id}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Bank Account Title</strong></td>
+                                            <td align="center">{{bankaccount.bank_account_title}}</td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td><strong>Bank Account Address</strong></td>
+                                            <td align="center">{{bankaccount.bank_account_address}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>City</strong></td>
+                                            <td align="center">{{bankaccount.city}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Country</strong></td>
+                                            <td align="center">{{bankaccount.country}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Postal Code</strong></td>
+                                            <td align="center">{{bankaccount.postal_code}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Pdf Attachment</strong></td>
+                                            {% if bankaccount.pdf_attachment_box %}
+                                            <td align="center"><a href="{{bankaccount.pdf_attachment_box.url}}" target="_blank">{{bankaccount.pdf_attachment_box.name}}</a></td>
+                                            {% else %}
+                                            <td align="center">No attachment</td>
+                                            {% endif %}
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Currency</strong></td>
+                                            <td align="center">{{bankaccount.currency.currency_name}} ({{bankaccount.currency.currency_symbol}})</td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td><strong>Notes</strong></td>
+                                            <td align="center">{{bankaccount.notes}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Net Balance</strong></td>
+                                            <td align="center"><span class="currency round">{{net_balance}}</span> {{bankaccount.currency.abbreviation}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><a href="{% url 'view_bank' %}" class="btn btn-success">Go back</a></td>
+                                            <td><a href="{% url 'bank_transactions' id=bankaccount.id %}" class="btn btn-primary">See transactions</a></td>
+                                        </tr>
+
+
+
+
+
+
+                                        </tbody>
+                                    </table>
+
+                                    <hr>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; EuroAsia Dashboard 2020</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+<!-- Page level plugins -->
+
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+
+<script>
+
+  function round(value, exp) {
+  if (typeof exp === 'undefined' || +exp === 0)
+    return Math.round(value);
+
+  value = +value;
+  exp = +exp;
+
+  if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+    return NaN;
+
+  // Shift
+  value = value.toString().split('e');
+  value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+  // Shift back
+  value = value.toString().split('e');
+  return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+}
+
+let x = document.querySelectorAll(".round");
+        for (let i = 0, len = x.length; i < len; i++) {
+            let num = round(parseFloat(x[i].innerHTML), 2);
+            x[i].innerHTML = num;
+
+        }
+
+
+ x = document.querySelectorAll(".currency");
+        for (let i = 0, len = x.length; i < len; i++) {
+            let num = Number(x[i].innerHTML)
+                      .toLocaleString('en');
+            x[i].innerHTML = num;
+
+        }
+
+</script>
+
+
+</body>
+
+</html>
